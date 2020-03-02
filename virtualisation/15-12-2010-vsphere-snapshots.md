@@ -21,7 +21,7 @@ Before we talk about some more about snapshots, let’s get a few things sorted.
 
 There are actually two files for every virtual disk. One is tiny and defines the drive geometry – that is, the number of cylinders, sectors and heads – so that the VM BIOS knows how to address the disk. The second file holds the actual data. I find it convenient to think of this as a matrix of disk blocks, as shown in the following diagram. (As always, click the picture for a zoomed version.)
 
-![Image 1](https://github.com/daemonchild/blog/images/15122010-vsphere-snapshots-1.png "Image 1")
+![Image 1](https://github.com/daemonchild/blog/blob/master/images/15122010-vsphere-snapshots-1.png "Image 1")
 
 
 The VM is depicted as reading and writing from this bunch of disk blocks. This notation is important for our discussion, because it is the target of this I/O that changes when we add a snapshot to a VM. In this discussion, we’re talking about virtual machine disk snapshots rather than memory snapshots by the way. The concept is similar, but it’s the disk snapshots that tend to get admins into trouble.
@@ -31,7 +31,7 @@ So lets, add a snapshot to our virtual machine configuration. In vSphere, what h
 The write I/O of the VM is redirected into this snapshot file.
 
 
-![Image 2](https://github.com/daemonchild/blog/images/15122010-vsphere-snapshots-2.png "Image 2")
+![Image 2](https://github.com/daemonchild/blog/blob/master/images/15122010-vsphere-snapshots-2.png "Image 2")
 
 
 
@@ -52,7 +52,7 @@ Ok. So we’re finished with our snapshot, what choices do we have? There are es
 Assuming that the snapshot is being used to allow a backup to take place the snapshot data will be kept. We want the changes that took place during the backup to be merged with the data in the VMDK. The vmkernel needs to trawl through the log file and overwrite the data in the VMDK file with the most up to date copy from the snapshot log file. The diagram aims to show this happening.
 
 
-![Image 3](https://github.com/daemonchild/blog/images/15122010-vsphere-snapshots-3.png "Image 3")
+![Image 3](https://github.com/daemonchild/blog/blob/master/images/15122010-vsphere-snapshots-3.png "Image 3")
 
 
 
@@ -63,7 +63,7 @@ Sometimes, the snapshot file gets quite large during the time that it was in ser
 Another possibility is that we don’t want the data that has accumulated inside the log file. Perhaps this is the result of a failed upgrade or patch. The patch changes will be inside the log file, so we could ask vSphere to destroy this data and return to the original base VMDK file.
 
 
-![Image 4](https://github.com/daemonchild/blog/images/15122010-vsphere-snapshots-4.png "Image 4")
+![Image 4](https://github.com/daemonchild/blog/blob/master/images/15122010-vsphere-snapshots-4.png "Image 4")
 
 
 
@@ -80,7 +80,7 @@ The only way to ensure that this is not going to happen is to stop users accessi
 Another possible choice is to add a second snapshot on top of the first. A good example of when to use this might be that you are applying a series of upgrades or patches that have interdependencies. If the first goes well, you might choose to attempt the next stage. So we might snapshot at each step, meaning that we can roll back just the last one or two step should something go bad, rather than starting over back at the base disk.
 
 
-![Image 5](https://github.com/daemonchild/blog/images/15122010-vsphere-snapshots-5.png "Image 5")
+![Image 5](https://github.com/daemonchild/blog/blob/master/images/15122010-vsphere-snapshots-5.png "Image 5")
 
 
 
